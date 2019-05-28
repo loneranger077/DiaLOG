@@ -1,1 +1,1 @@
-# bc-project-2
+This chat app allows users to create groups for coworkers, their friends, family, etc. Each group can have seperate channels to discuss different topics. They can also share documents or images uploaded from their machines! 
