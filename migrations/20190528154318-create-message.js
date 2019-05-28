@@ -9,15 +9,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       user: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Users', key: 'id' }
       },
       group: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Groups', key: 'id' }
       },
       channel: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Channels', key: 'id' }
       },
       body: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       title: {

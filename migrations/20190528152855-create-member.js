@@ -9,10 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       user: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        unique: 'uniqueMember',
+        type: Sequelize.INTEGER,
+        references: { model: 'Users', key: 'id' }
       },
       group: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        unique: 'uniqueMember',
+        type: Sequelize.INTEGER,
+        references: { model: 'Groups', key: 'id' }
       },
       createdAt: {
         allowNull: false,

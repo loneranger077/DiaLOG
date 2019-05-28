@@ -9,15 +9,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       username: {
+        allowNull: false,
+        unique: true,
         type: Sequelize.STRING
       },
       password: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       active: {
+        allowNull: false,
+        default: false,
         type: Sequelize.BOOLEAN
       },
       admin: {
+        allowNull: false,
+        default: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {
