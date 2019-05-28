@@ -6,7 +6,7 @@ module.exports = function (app) {
         res.render("components/index", function (err, html) {
             res.render("template", {
                 title: "Chat",
-                content: html
+				content: html
             });
         });
     });
