@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "FMLkLA7ss5E3j2PG",
-    "database": "watchpad_development",
+    "database": "chat_app_development",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "serverPort": 3000
@@ -10,7 +10,7 @@
   "test": {
     "username": "root",
     "password": null,
-    "database": "watchpad_test",
+    "database": "chat_app_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "serverPort": 3000
@@ -18,7 +18,7 @@
   "production": {
     "username": "root",
     "password": null,
-    "database": "watchpad_production",
+    "database": "chat_app_production",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "serverPort": 3000
