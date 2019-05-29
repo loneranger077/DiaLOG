@@ -1,4 +1,5 @@
 'use strict';
+const bcrypt = require("bcrypt")
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     username: {
@@ -8,16 +9,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      set(val) {
+        const hash = bcrypt.hashSync(val, 10);
+        this.setDataValue('password', hash);
+      }
     },
     active: {
-      allowNull: false,
-      default: false,
+      defaultValue: false,
       type: DataTypes.BOOLEAN
     },
     admin: {
-      allowNull: false,
-      default: false,
+      defaultValue: false,
       type: DataTypes.BOOLEAN
     }
   }, {});
