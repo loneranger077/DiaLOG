@@ -36,7 +36,7 @@ module.exports = function (app) {
             const array = groups.map(function(group) {
                 return {name: group.name, description: group.description}
             });
-            return res.status(200).json({success: true})
+            res.status(200).json({ success: true, groups: array})
         }).catch(error => {
             res.status(500).json({error: error})
         });
