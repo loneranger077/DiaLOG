@@ -13,7 +13,7 @@ module.exports = function (app) {
                 });
             });
         }
-        if (sessionHelper.active(req)){
+        if (sessionHelper.active(req)) {
             sessionHelper.getUser(req).then(user => {
                 sessionHelper.getGroups(req).then(groups => {
                     render({ username: user.username, groups: groups.map(group => {
@@ -21,7 +21,7 @@ module.exports = function (app) {
                     }).join(', ')})
                 })
             })
-        }else{
+        } else {
             render({ username: "Not logged in" })
         }
     });
@@ -35,6 +35,15 @@ module.exports = function (app) {
                     content: html,
                     scripts: data
                 });
+            });
+        });
+    });
+
+    app.get("/createGroup", function (req, res) {
+        res.render("components/createGroup", function (err, html) {
+            res.render("template", {
+                title: "Create a Group",
+                content: html
             });
         });
     });
