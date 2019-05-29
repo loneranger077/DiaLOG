@@ -1,10 +1,15 @@
 const express = require("express")
 require('dotenv').config()
-const env = process.env.NODE_ENV || 'development';
-const config = require('./config/config.js')[env];
+const session = require('express-session');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true
+}));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
