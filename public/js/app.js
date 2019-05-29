@@ -11,7 +11,7 @@ $(document).on("submit", "form.ajaxForm", function (e) {
         data: formObject
     }).then(function (response) {
         console.log(response);
-        form.context.reset();
+        form[0].reset();
     }).catch(function (error) {
         console.log(error);
     });
