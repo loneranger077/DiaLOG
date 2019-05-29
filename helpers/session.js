@@ -20,6 +20,9 @@ module.exports = {
             })
         });
     },
+    active: req => {
+        return req.session.userID
+    },
     getUser: (req) => {
         return new Promise(function (resolve, reject) {
             db.User.findOne({
