@@ -3,25 +3,25 @@ module.exports = (sequelize, DataTypes) => {
   const Message = sequelize.define('Message', {
     user: {
       allowNull: false,
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: { model: 'Users', key: 'id' }
     },
     group: {
       allowNull: false,
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: { model: 'Groups', key: 'id' }
     },
     channel: {
       allowNull: false,
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: { model: 'Channels', key: 'id' }
     },
     body: {
       allowNull: false,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     title: {
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     }
   }, {});
   Message.associate = function(models) {

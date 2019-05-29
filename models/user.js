@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       allowNull: false,
       unique: true,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     password: {
       allowNull: false,
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       set(val) {
         const hash = bcrypt.hashSync(val, 10);
         this.setDataValue('password', hash);
@@ -18,12 +18,12 @@ module.exports = (sequelize, DataTypes) => {
     active: {
       allowNull: false,
       default: false,
-      type: Sequelize.BOOLEAN
+      type: DataTypes.BOOLEAN
     },
     admin: {
       allowNull: false,
       default: false,
-      type: Sequelize.BOOLEAN
+      type: DataTypes.BOOLEAN
     }
   }, {});
   User.associate = function(models) {

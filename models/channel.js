@@ -3,14 +3,14 @@ module.exports = (sequelize, DataTypes) => {
   const Channel = sequelize.define('Channel', {
     name: {
       allowNull: false,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     description: {
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     group: {
       allowNull: false,
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: { model: 'Groups', key: 'id' }
     }
   }, {});
