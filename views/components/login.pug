@@ -1,0 +1,18 @@
+.row
+    .col-2
+    .col-8.card.m-4.p-4
+        form.ajaxForm.loginForm(method="POST" action="/api/login" data-state="login")
+            h2 Login 
+            .form-group
+                label(for='userUsernameInput') Username
+                input#userUsernameInput.form-control(type='text' name="username" placeholder='Username')
+            .form-group
+                label(for='userPasswordInput') Password
+                input#userPasswordInput.form-control(type='password' name="password" placeholder='Password')
+            .form-group.passwordConfirm.d-none
+                label(for='userPasswordConfirmInput') Password (Re-Type)
+                input#userPasswordConfirmInput.form-control(type='password' name="passwordConfirm" placeholder='Password (Re-Type)')
+            .d-flex.justify-content-between.align-content-center
+                button.btn.btn-light.toggleLoginForm(type='button') Create Account
+                button.btn.btn-primary.actionButton.ml-2(type='submit') Login
+    .col-2
