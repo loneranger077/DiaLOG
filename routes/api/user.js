@@ -1,5 +1,5 @@
 const path = require("path");
-const bcrypt = require("bcrypt");
+const sessionHelper = require("../../helpers/session.js")
 
 const db = require("../../models")
 
@@ -21,17 +21,8 @@ module.exports = function (app) {
 
     app.post("/api/login", function (req, res) {
         const form = req.body
-        db.User.findOne({
-            where: {
-                username: form.username
-            }
-        }).then((user) => {
-            if (bcrypt.compareSync(form.password, user.password)){
-                req.session.userID = user.id
-                res.status(200).json({ success: true, uid: user.id })
-            } else {
-                res.status(404).send("Invalid username or password")
-            }
+        sessionHelper.verify(req, form.username, form.password).then((user) => {
+            res.status(200).json({ success: true, uid: user })
         }).catch(error => {
             res.status(500).json({ error: error })
         })
