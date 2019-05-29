@@ -8,6 +8,7 @@
     "start": "node app.js",
     "migrate": "npx sequelize db:migrate",
     "seed": "npx sequelize db:seed:all",
+    "reset": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate",
     "unseed": "npx sequelize db:seed:undo:all"
   },
   "repository": {
