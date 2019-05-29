@@ -28,4 +28,20 @@ module.exports = function (app) {
         });
     });
 
+    app.get("/api/groups", function (req, res) {
+        if (!sessionHelper.active(req)) {
+            return res.status(400).json({error: "is not logged in"});
+        };
+        sessionHelper.getGroups(req).then(function(groups) {
+            const array = groups.map(function(group) {
+                return {name: group.name, description: group.description}
+            });
+            return res.status(200).json({success: true})
+        }).catch(error => {
+            res.status(500).json({error: error})
+        });
+    }).catch(error => {
+        res.status(500).json({error: error})
+    });
+
 };
