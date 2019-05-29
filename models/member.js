@@ -4,13 +4,13 @@ module.exports = (sequelize, DataTypes) => {
     user: {
       allowNull: false,
       unique: 'uniqueMember',
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: { model: 'Users', key: 'id' }
     },
     group: {
       allowNull: false,
       unique: 'uniqueMember',
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: { model: 'Groups', key: 'id' }
     }
   }, {});

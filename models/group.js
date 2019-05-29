@@ -3,14 +3,14 @@ module.exports = (sequelize, DataTypes) => {
   const Group = sequelize.define('Group', {
     name: {
       allowNull: false,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     description: {
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     user: {
       allowNull: false,
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: { model: 'Users', key: 'id' }
     }
   }, {});

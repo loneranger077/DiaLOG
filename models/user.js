@@ -4,21 +4,21 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       allowNull: false,
       unique: true,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     password: {
       allowNull: false,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     active: {
       allowNull: false,
       default: false,
-      type: Sequelize.BOOLEAN
+      type: DataTypes.BOOLEAN
     },
     admin: {
       allowNull: false,
       default: false,
-      type: Sequelize.BOOLEAN
+      type: DataTypes.BOOLEAN
     }
   }, {});
   User.associate = function(models) {
