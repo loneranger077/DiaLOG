@@ -16,9 +16,9 @@ module.exports = function (app) {
         if (sessionHelper.active(req)){
             sessionHelper.getUser(req).then(user => {
                 sessionHelper.getGroups(req).then(groups => {
-                    render({ username: user.username, groups: JSON.stringify(groups.map(group => {
+                    render({ username: user.username, groups: groups.map(group => {
                         return group.name
-                    }))})
+                    }).join(', ')})
                 })
             })
         }else{
