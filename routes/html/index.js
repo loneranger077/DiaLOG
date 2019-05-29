@@ -47,4 +47,18 @@ module.exports = function (app) {
             });
         });
     });
+
+
+    app.get("/groups", function (req, res) {
+        res.render("components/groups", function (err, html) {
+            fs.readFile(path.join(__dirname, "../../views/components/scripts/groups.js"), "utf8", (err, data) => {
+                if (err) throw err;
+                res.render("template", {
+                    title: "Groups",
+                    content: html,
+                    scripts: data
+                });
+            });
+        });
+    });
 };
