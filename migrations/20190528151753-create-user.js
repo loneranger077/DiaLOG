@@ -19,12 +19,12 @@ module.exports = {
       },
       active: {
         allowNull: false,
-        default: false,
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       admin: {
         allowNull: false,
-        default: false,
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {

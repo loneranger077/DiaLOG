@@ -16,13 +16,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     active: {
-      allowNull: false,
-      default: false,
+      defaultValue: false,
       type: DataTypes.BOOLEAN
     },
     admin: {
-      allowNull: false,
-      default: false,
+      defaultValue: false,
       type: DataTypes.BOOLEAN
     }
   }, {});
@@ -41,8 +39,5 @@ module.exports = (sequelize, DataTypes) => {
       constraints: true
     });
   };
-  User.login = function (passwordInput) {
-    return (bcrypt.compareSync(passwordInput, this.password)) ? true : false;
-  }
   return User;
 };
