@@ -35,5 +35,29 @@ module.exports = {
                 throw error
             })
         });
+    },
+    getGroups: function (req) {
+        const sessionUser = this.getUser(req)
+        return new Promise(function (resolve, reject) {
+            sessionUser.then(user => {
+                user.getMembers().then(members => {
+                    db.Group.findAll({
+                        where: {
+                            id: members.map(member => {
+                                return member.group
+                            })
+                        }
+                    }).then(groups => {
+                        resolve( groups )
+                    }).catch(error => {
+                        throw error
+                    })
+                }).catch(error => {
+                    throw error
+                })
+            }).catch(error => {
+                throw error
+            })
+        });
     }
 };
