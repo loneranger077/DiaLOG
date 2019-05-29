@@ -15,7 +15,11 @@ module.exports = function (app) {
         }
         if (sessionHelper.active(req)){
             sessionHelper.getUser(req).then(user => {
-                render({ username: user.username })
+                sessionHelper.getGroups(req).then(groups => {
+                    render({ username: user.username, groups: JSON.stringify(groups.map(group => {
+                        return group.name
+                    }))})
+                })
             })
         }else{
             render({ username: "Not logged in" })
