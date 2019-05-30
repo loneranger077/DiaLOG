@@ -70,10 +70,6 @@ $(document).ready(function(){
 
     }
 
-    const changeGroup = (link) => {
-
-    }
-
     const renderGroups = (groups) => {
         for (group of groups) {
             groupsContainer.append(buildButton(group.channelsAPIPath, group.name, "channels"))
@@ -82,6 +78,7 @@ $(document).ready(function(){
 
     const renderChannels = (channels) => {
         channelsContainer.find("li:not(.static)").remove()
+        messagesContainer.find(".list-group-item").remove()
         for (channel of channels) {
             channelsContainer.append(buildButton(channel.messagesAPIPath, channel.name, "messages"))
         }
@@ -89,8 +86,8 @@ $(document).ready(function(){
 
     const renderMessages = (messages) => {
         messagesContainer.find(".list-group-item").remove()
-        for (messages of messages) {
-            channelsContainer.append(buildButton(channel.messagesAPIPath, channel.name, "messages"))
+        for (message of messages) {
+            messagesContainer.prepend(buildMessage(message.body))
         }
     }
 
@@ -111,7 +108,6 @@ $(document).ready(function(){
                 getMessages(link).then(messages => { renderMessages(messages) })
                 break;
         }
-
         button.addClass("active")
     })
 })
