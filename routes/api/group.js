@@ -22,7 +22,6 @@ module.exports = function (app) {
             }).catch(error => {
                 res.status(500).json({ error: error })
             });
-            res.status(200).json({ success: true })
         }).catch(error => {
             res.status(500).json({ error: error })
         });
