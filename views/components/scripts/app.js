@@ -3,10 +3,14 @@ $(document).ready(function(){
     const groupsContainer = $("#groups > ul")
     const channelsContainer = $("#channels > ul")
     const messagesContainer = $("#view > .messages > .list-group")
+    const messageForm = $("#message-form")
 
     const buildButton = (link, text, action) => {
         const buttonContainer = $("<li>").addClass("nav-item")
-        buttonContainer.append($("<a>").addClass("nav-link action-button").attr("href", link).attr("data-action", action).text(text))
+        buttonContainer.append($("<a>")
+        .addClass("nav-link action-button")
+        .attr("href", link)
+        .attr("data-action", action).text(text))
         return buttonContainer
     }
 
@@ -58,7 +62,7 @@ $(document).ready(function(){
 
     }
 
-    const createChannel = () => {
+    const createChannel = (link) => {
 
     }
 
@@ -102,10 +106,12 @@ $(document).ready(function(){
             case "channels":
                 groupsContainer.find(".action-button").removeClass("active")
                 getChannels(link).then(channels => { renderChannels(channels) })
+                messageForm.attr("action", "")  
                 break;
             case "messages":
                 channelsContainer.find(".action-button").removeClass("active")
                 getMessages(link).then(messages => { renderMessages(messages) })
+                messageForm.attr("action", link)  
                 break;
         }
         button.addClass("active")
