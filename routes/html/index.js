@@ -13,11 +13,15 @@ module.exports = function (app) {
                 });
             });
         }
-        if (sessionHelper.active(req)){
+        if (sessionHelper.active(req)) {
             sessionHelper.getUser(req).then(user => {
-                render({ username: user.username })
+                sessionHelper.getGroups(req).then(groups => {
+                    render({ username: user.username, groups: groups.map(group => {
+                        return group.name
+                    }).join(', ')})
+                })
             })
-        }else{
+        } else {
             render({ username: "Not logged in" })
         }
     });
@@ -28,6 +32,42 @@ module.exports = function (app) {
                 if (err) throw err;
                 res.render("template", {
                     title: "Login",
+                    content: html,
+                    scripts: data
+                });
+            });
+        });
+    });
+
+    app.get("/createGroup", function (req, res) {
+        res.render("components/createGroup", function (err, html) {
+            res.render("template", {
+                title: "Create a Group",
+                content: html
+            });
+        });
+    });
+
+
+    app.get("/groups", function (req, res) {
+        res.render("components/groups", function (err, html) {
+            fs.readFile(path.join(__dirname, "../../views/components/scripts/groups.js"), "utf8", (err, data) => {
+                if (err) throw err;
+                res.render("template", {
+                    title: "Groups",
+                    content: html,
+                    scripts: data
+                });
+            });
+        });
+    });
+
+    app.get("/group/:group", function (req, res) {
+        res.render("components/group", {groupID: req.params.group}, function (err, html) {
+            fs.readFile(path.join(__dirname, "../../views/components/scripts/group.js"), "utf8", (err, data) => {
+                if (err) throw err;
+                res.render("template", {
+                    title: "Group",
                     content: html,
                     scripts: data
                 });

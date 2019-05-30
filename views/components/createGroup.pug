@@ -1,0 +1,14 @@
+.row
+    .col-2
+    .col-8.card.m-4.p-4
+        form.ajaxForm.loginForm(method="POST" action="/api/groups" data-state="login")
+            h2 Create a Group
+            .form-group
+                label(for='userNameInput') Group Name
+                input#userNameInput.form-control(type='text' name="name" placeholder='Group name')
+            .form-group
+                label(for='userDescriptionInput') Description
+                input#userDescriptionInput.form-control(type='text' name="description" placeholder='Description')
+            .d-flex.justify-content-between.align-content-center
+                button.btn.btn-primary.actionButton.ml-2(type='submit') Submit
+    .col-2

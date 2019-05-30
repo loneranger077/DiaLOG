@@ -13,7 +13,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: { model: 'Users', key: 'id' }
     }
-  }, {});
+  }, {
+      getterMethods: {
+        groupViewPath() {
+          return `/group/${this.id}`
+        },
+          channelsAPIPath() {
+          return `/api/channels/${this.id}`
+        }
+      }
+  });
   Group.associate = function(models) {
     // associations can be defined here
     this.hasMany(models.Member, {
