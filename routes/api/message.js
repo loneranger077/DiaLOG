@@ -22,4 +22,27 @@ module.exports = function (app) {
         })
     });
 
+    app.post("/api/messages/:channel", function (req, res) {
+        if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
+        const message = req.body
+        db.Channel.findOne({
+            where: {
+                id: req.params.channel
+            }
+        }).then(channel => {
+            db.Message.create({
+                channel: channel.id,
+                body: message.body,
+                user: sessionHelper.active(req),
+                group: channel.group
+            }).then(message => {
+                res.status(200).json({success: true, mid: message.id})
+            }).catch(err => {
+                res.status(500).json({ error: err })
+            })
+        }).catch(err => {
+            res.status(500).json({ error: err })
+        })
+    });
+
 };

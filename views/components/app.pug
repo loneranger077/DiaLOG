@@ -15,8 +15,8 @@
                 a.nav-link.mb-1.btn-secondary(href="#") Create Channel
     #view.w-100.h-100.position-relative.d-flex.flex-column
         nav.navbar.w-100.navbar-light.bg-light.border-bottom
-            form#message-form.form-inline(action="" method="POST")
-                input.form-control.mr-sm-2(type='text' placeholder='Message' name='message')
+            form#message-form.ajaxForm.form-inline(action="" method="POST")
+                input.form-control.mr-sm-2(type='text' placeholder='Message' name='body')
                 button.btn.btn-primary.my-2.my-sm-0(type='submit') Send
         .messages.h-100.overflow-auto
             .list-group.list-group-flush
