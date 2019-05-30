@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     const groupsContainer = $("#groups > ul")
-    const channelsContainer = $("#channels")
+    const channelsContainer = $("#channels > ul")
     const messagesContainer = $("#view > .messages > .list-group")
 
     const buildButton = (link, text, action) => {
@@ -21,7 +21,7 @@ $(document).ready(function(){
                 url: link,
                 method: "GET"
             }).then(function (response) {
-                resolve(response);
+                resolve(response.messages);
             }).catch(function (error) {
                 reject(error);
             });
@@ -34,7 +34,7 @@ $(document).ready(function(){
                 url: link,
                 method: "GET"
             }).then(function (response) {
-                resolve(response);
+                resolve(response.channels);
             }).catch(function (error) {
                 reject(error);
             });
@@ -74,9 +74,44 @@ $(document).ready(function(){
 
     }
 
-    getGroups().then(groups => {
-        for (group of groups){
+    const renderGroups = (groups) => {
+        for (group of groups) {
             groupsContainer.append(buildButton(group.channelsAPIPath, group.name, "channels"))
         }
+    }
+
+    const renderChannels = (channels) => {
+        channelsContainer.find("li:not(.static)").remove()
+        for (channel of channels) {
+            channelsContainer.append(buildButton(channel.messagesAPIPath, channel.name, "messages"))
+        }
+    }
+
+    const renderMessages = (messages) => {
+        messagesContainer.find(".list-group-item").remove()
+        for (messages of messages) {
+            channelsContainer.append(buildButton(channel.messagesAPIPath, channel.name, "messages"))
+        }
+    }
+
+    getGroups().then(groups => { renderGroups(groups) })
+
+    $(document).on("click", ".action-button", function(e){
+        e.preventDefault()
+        const button = $(this)
+        const action = button.attr("data-action")
+        const link = button.attr("href")
+        switch (action) {
+            case "channels":
+                groupsContainer.find(".action-button").removeClass("active")
+                getChannels(link).then(channels => { renderChannels(channels) })
+                break;
+            case "messages":
+                channelsContainer.find(".action-button").removeClass("active")
+                getMessages(link).then(messages => { renderMessages(messages) })
+                break;
+        }
+
+        button.addClass("active")
     })
 })

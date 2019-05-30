@@ -15,9 +15,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
       getterMethods: {
-        groupViewPath() {
-          return `/group/${this.id}`
-        },
         channelsAPIPath() {
           return `/api/channels/${this.id}`
         }

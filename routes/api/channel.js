@@ -43,7 +43,7 @@ module.exports = function (app) {
                 }
             }).then(channels => {
                 res.status(200).json({ success: true, channels: channels.map(channel => {
-                    return {id: channel.id, name: channel.name}
+                    return { id: channel.id, name: channel.name, messagesAPIPath: channel.messagesAPIPath}
                 }) })
             }).catch(err => {
                 res.status(500).json({ error: error })
