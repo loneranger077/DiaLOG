@@ -7,24 +7,57 @@
 .d-flex.flex-row.h-view
     #groups.h-100
         ul.nav.flex-column.navbar-light.bg-light.h-100.border-right.text-nowrap.nav-pills.p-2
-            li.nav-item
-                a.nav-link.active(href="#") Group 1
-            li.nav-item
-                a.nav-link(href="#") Group 2
-            li.nav-item
-                a.nav-link(href="#") Group 3
-            li.nav-item
-                a.nav-link(href="#") Group 4
+            li.nav-item.action-button
+                a.nav-link.mb-1.btn-secondary(href="#") Create Group
     #channels.h-100
         ul.nav.flex-column.navbar-light.bg-light.h-100.border-right.text-nowrap.nav-pills.p-2
+            li.nav-item.action-button
+                a.nav-link.mb-1.btn-secondary(href="#") Create Channel
             li.nav-item
                 a.nav-link.active(href="#") General
             li.nav-item
                 a.nav-link(href="#") Ideas
             li.nav-item
                 a.nav-link(href="#") Announcements
-    #view.w-100.h-100.position-relative
-        nav.navbar.fixed-bottom.position-absolute.bottom-0.w-100
+            li.nav-item
+                a.nav-link(href="#") Memes
+            li.nav-item
+                a.nav-link(href="#") Random
+            li.nav-item
+                a.nav-link(href="#") Projects
+            li.nav-item
+                a.nav-link(href="#") Videos
+            li.nav-item
+                a.nav-link(href="#") Resources
+            li.nav-item
+                a.nav-link(href="#") Questions
+            li.nav-item
+                a.nav-link(href="#") Requests
+    #view.w-100.h-100.position-relative.d-flex.flex-column
+        nav.navbar.w-100.navbar-light.bg-light.border-bottom
             form.form-inline
-                input.form-control.mr-sm-2(type='search' placeholder='Search' aria-label='Search')
-                button.btn.btn-primary.my-2.my-sm-0(type='submit') Search
+                input.form-control.mr-sm-2(type='text' placeholder='Message' aria-label='Message')
+                button.btn.btn-primary.my-2.my-sm-0(type='submit') Send
+        .messages.h-100.overflow-auto
+            .list-group.list-group-flush
+                .list-group-item Message That is 
+                .list-group-item Message That is not long
+                .list-group-item Message That is so long that it needs to wrap around to the other side but i am running out of things to type so i am just going to type what i am thinking in order to make this long enough but i want it to a little bit longer so i am adding more to it
+                .list-group-item Message That is not long
+                .list-group-item Message That is not 
+                .list-group-item Message That is not long
+                .list-group-item Message That is  long
+                .list-group-item Message That not long
+                .list-group-item Message That is so long that it needs to wrap around to the other side but i am running out of things
+                .list-group-item Message That is not long
+                .list-group-item Message is not long
+                .list-group-item Message is 
+                .list-group-item Message long not
+                .list-group-item Message That is not long
+                .list-group-item Message That is longer than the others
+                .list-group-item Message That is not long
+                .list-group-item Message That is not long
+                .list-group-item Message That is not long
+                .list-group-item Message That is not long
+                .list-group-item Message That is not long
+                .list-group-item Message That is not long

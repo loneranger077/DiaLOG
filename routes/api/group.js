@@ -33,7 +33,7 @@ module.exports = function (app) {
         };
         sessionHelper.getGroups(req).then(function (groups) {
             const array = groups.map(function (group) {
-                return { id: group.id, name: group.name, description: group.description, groupPath: group.groupViewPath }
+                return { id: group.id, name: group.name, description: group.description, channelsAPIPath: group.channelsAPIPath }
             });
             res.status(200).json({ success: true, groups: array })
         }).catch(error => {

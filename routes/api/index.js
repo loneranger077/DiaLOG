@@ -4,4 +4,5 @@ module.exports = function (app) {
 
     require("./user.js")(app);
     require("./group.js")(app);
+    require("./channel.js")(app);
 };
