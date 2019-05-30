@@ -39,22 +39,12 @@ module.exports = function (app) {
         });
     });
 
-    app.get("/createGroup", function (req, res) {
-        res.render("components/createGroup", function (err, html) {
-            res.render("template", {
-                title: "Create a Group",
-                content: html
-            });
-        });
-    });
-
-
-    app.get("/groups", function (req, res) {
-        res.render("components/groups", function (err, html) {
-            fs.readFile(path.join(__dirname, "../../views/components/scripts/groups.js"), "utf8", (err, data) => {
+    app.get("/app", function (req, res) {
+        res.render("components/app", function (err, html) {
+            fs.readFile(path.join(__dirname, "../../views/components/scripts/app.js"), "utf8", (err, data) => {
                 if (err) throw err;
                 res.render("template", {
-                    title: "Groups",
+                    title: "DiaLOG",
                     content: html,
                     scripts: data
                 });
@@ -62,16 +52,4 @@ module.exports = function (app) {
         });
     });
 
-    app.get("/group/:group", function (req, res) {
-        res.render("components/group", {groupID: req.params.group}, function (err, html) {
-            fs.readFile(path.join(__dirname, "../../views/components/scripts/group.js"), "utf8", (err, data) => {
-                if (err) throw err;
-                res.render("template", {
-                    title: "Group",
-                    content: html,
-                    scripts: data
-                });
-            });
-        });
-    });
 };

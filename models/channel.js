@@ -13,7 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: { model: 'Groups', key: 'id' }
     }
-  }, {});
+  }, {
+      getterMethods: {
+        messagesAPIPath() {
+          return `/api/messages/${this.id}`
+        }
+      }
+  });
   Channel.associate = function(models) {
     // associations can be defined here
     this.hasMany(models.Message, {

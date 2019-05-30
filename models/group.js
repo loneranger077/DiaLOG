@@ -15,15 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
       getterMethods: {
-        groupViewPath() {
-          return `/group/${this.id}`
-        },
-          channelsAPIPath() {
+        channelsAPIPath() {
           return `/api/channels/${this.id}`
         }
       }
-  });
-  Group.associate = function(models) {
+    });
+  Group.associate = function (models) {
     // associations can be defined here
     this.hasMany(models.Member, {
       foreignKey: 'group',
@@ -37,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'group',
       constraints: true
     });
-    
+
     this.belongsTo(models.User, {
       foreignKey: 'user',
       constraints: true
