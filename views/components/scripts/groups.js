@@ -5,12 +5,13 @@ $(document).ready(function(){
         groupJumbotron.append(groupContainer)
         groupContainer.append($("<h2>").addClass("display-4").text(group.name))
         groupContainer.append($("<p>").addClass("lead").text(group.description))
+        groupContainer.append($("<a>").addClass("lead").text("Channels").attr("href", group.groupPath))
         return groupJumbotron
     }
 
     const buildGroupsContainer = (groups) => {
         const container = $("#groupsContainer")
-        for (group of groups){
+        for (group of groups) {
             container.append($("<div>").addClass("col-4").append(buildGroupJumbotron(group)))
         }
     }

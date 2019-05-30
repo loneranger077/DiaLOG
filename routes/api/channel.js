@@ -28,4 +28,29 @@ module.exports = function (app) {
         })
     });
 
+    app.get("/api/channels/:group", function (req, res) {
+        if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
+        const channel = req.body
+        db.Member.findOne({
+            where: {
+                group: req.params.group,
+                user: sessionHelper.active(req)
+            }
+        }).then(member => {
+            db.Channel.findAll({
+                where: {
+                    group: member.group
+                }
+            }).then(channels => {
+                res.status(200).json({ success: true, channels: channels.map(channel => {
+                    return {id: channel.id, name: channel.name}
+                }) })
+            }).catch(err => {
+                res.status(500).json({ error: error })
+            })
+        }).catch(err => {
+            res.status(500).json({ error: error })
+        })
+    });
+
 };

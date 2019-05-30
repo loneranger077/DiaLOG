@@ -29,15 +29,15 @@ module.exports = function (app) {
 
     app.get("/api/groups", function (req, res) {
         if (!sessionHelper.active(req)) {
-            return res.status(400).json({error: "is not logged in"});
+            return res.status(400).json({ error: "is not logged in" });
         };
-        sessionHelper.getGroups(req).then(function(groups) {
-            const array = groups.map(function(group) {
-                return {name: group.name, description: group.description}
+        sessionHelper.getGroups(req).then(function (groups) {
+            const array = groups.map(function (group) {
+                return { id: group.id, name: group.name, description: group.description, groupPath: group.groupViewPath }
             });
-            res.status(200).json({ success: true, groups: array})
+            res.status(200).json({ success: true, groups: array })
         }).catch(error => {
-            res.status(500).json({error: error})
+            res.status(500).json({ error: error })
         });
     })
 
