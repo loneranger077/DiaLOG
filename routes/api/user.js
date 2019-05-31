@@ -28,4 +28,13 @@ module.exports = function (app) {
         })
     });
 
+    app.post("/api/logout", function (req, res) {
+        try {
+            req.session.destroy()
+            res.status(200).json({ success: true })
+        }catch (error){
+            res.status(500).json({ error: error })
+        }
+    });
+
 };
