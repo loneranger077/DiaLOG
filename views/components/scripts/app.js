@@ -7,6 +7,7 @@ $(document).ready(function(){
     const messageForm = $("#message-form")
     const createChannelButton = $("#create-channel-button")
     const addMemberButton = $("#add-member-button")
+    const logoutForm = $("#logout-form")
 
     const buildButton = (link, text, action, id) => {
         const buttonContainer = $("<li>").addClass("nav-item")
@@ -98,6 +99,82 @@ $(document).ready(function(){
         })
     }
 
+    const login = () => {
+        return new Promise(function (resolve, reject) {
+            const modal = $("#loginModal")
+            modal.modal('show')
+            const form = modal.find("form")
+            const modalTitle = modal.find(".modal-title")
+
+            $(modal).on("click", ".toggleLoginForm", function (e) {
+                let state = "login"
+                let action = "/api/login"
+                let title = "Login"
+                let toggleButton = "Create Account"
+                $(".passwordConfirm").addClass("d-none")
+                if (form.attr("data-state") === "login") {
+                    state = "create"
+                    action = "/api/users"
+                    title = "Create Account"
+                    toggleButton = "Existing User"
+                    $(".passwordConfirm").removeClass("d-none")
+                }
+                form.attr("data-state", state)
+                form.attr("action", action)
+                modalTitle.text(title)
+                form.find(".toggleLoginForm").text(toggleButton)
+            })
+
+            form.on("success", function (e, result) {
+                modal.modal('hide')
+                resolve(result)
+            })
+        })
+    }
+
+    const login = () => {
+        return new Promise(function (resolve, reject) {
+            const modal = $("#loginModal")
+            modal.modal('show')
+            const form = modal.find("form")
+            const modalTitle = modal.find(".modal-title")
+
+            $(modal).on("click", ".toggleLoginForm", function (e) {
+                let state = "login"
+                let action = "/api/login"
+                let title = "Login"
+                let toggleButton = "Create Account"
+                $(".passwordConfirm").addClass("d-none")
+                if (form.attr("data-state") === "login") {
+                    state = "create"
+                    action = "/api/users"
+                    title = "Create Account"
+                    toggleButton = "Existing User"
+                    $(".passwordConfirm").removeClass("d-none")
+                }
+                form.attr("data-state", state)
+                form.attr("action", action)
+                modalTitle.text(title)
+                form.find(".toggleLoginForm").text(toggleButton)
+            })
+
+            form.on("success", function (e, result) {
+                modal.modal('hide')
+                resolve(result)
+            })
+        })
+    }
+
+
+
+    const logout = () => {
+        return new Promise(function (resolve, reject) {
+            logoutForm.on("success", function (e, result) {
+                resolve(result)
+            })
+        })
+    }
+
     const sendMessage = (link) => {
 
     }
@@ -163,6 +240,13 @@ $(document).ready(function(){
             case "addMember":
                 addMember(membersLink(context)).then(member => {
                     //TODO Success
+                })
+                break;
+            case "logout":
+                logout().then(result => {
+                    login().then(result => {
+                        //TODO Success
+                    })
                 })
                 break;
         }
