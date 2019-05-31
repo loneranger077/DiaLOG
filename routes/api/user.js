@@ -13,7 +13,11 @@ module.exports = function (app) {
             password: user.password,
             active: true
         }).then(() => {
-            res.status(200).json({ success: true })
+            sessionHelper.verify(req, user.username, user.password).then((user) => {
+                res.status(200).json({ success: true, uid: user })
+            }).catch(error => {
+                res.status(500).json({ error: error })
+            })
         }).catch(error => {
             res.status(500).json({ error: error })
         })
