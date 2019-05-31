@@ -15,11 +15,11 @@ module.exports = function (app) {
         }).then(() => {
             sessionHelper.verify(req, user.username, user.password).then((user) => {
                 res.status(200).json({ success: true, uid: user })
-            }).catch(error => {
-                res.status(500).json({ error: error })
+            }).catch(err => {
+                res.status(500).json({ error: err })
             })
-        }).catch(error => {
-            res.status(500).json({ error: error })
+        }).catch(err => {
+            res.status(500).json({ error: err })
         })
     });
 
@@ -27,8 +27,8 @@ module.exports = function (app) {
         const form = req.body
         sessionHelper.verify(req, form.username, form.password).then((user) => {
             res.status(200).json({ success: true, uid: user })
-        }).catch(error => {
-            res.status(500).json({ error: error })
+        }).catch(err => {
+            res.status(500).json({ error: err })
         })
     });
 
@@ -36,8 +36,8 @@ module.exports = function (app) {
         try {
             req.session.destroy()
             res.status(200).json({ success: true })
-        } catch (error) {
-            res.status(500).json({ error: error })
+        } catch (err) {
+            res.status(500).json({ error: err })
         }
     });
 
@@ -48,8 +48,8 @@ module.exports = function (app) {
             }else{
                 res.status(200).json({ active: true })
             }
-        } catch (error) {
-            res.status(500).json({ error: error })
+        } catch (err) {
+            res.status(500).json({ error: err })
         }
     });
 

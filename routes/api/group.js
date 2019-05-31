@@ -19,11 +19,11 @@ module.exports = function (app) {
                 user: group.user
             }).then(() => {
                 res.status(200).json({ success: true, group: group.mapData })
-            }).catch(error => {
-                res.status(500).json({ error: error })
+            }).catch(err => {
+                res.status(500).json({ error: err })
             });
-        }).catch(error => {
-            res.status(500).json({ error: error })
+        }).catch(err => {
+            res.status(500).json({ error: err })
         });
     });
 
@@ -36,8 +36,8 @@ module.exports = function (app) {
                 return group.mapData
             });
             res.status(200).json({ success: true, groups: array })
-        }).catch(error => {
-            res.status(500).json({ error: error })
+        }).catch(err => {
+            res.status(500).json({ error: err })
         });
     })
 

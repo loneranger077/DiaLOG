@@ -21,16 +21,15 @@ module.exports = function (app) {
             }).then(channel => {
                 res.status(200).json({ success: true, channel: channel.mapData })
             }).catch(err => {
-                res.status(500).json({ error: error })
+                res.status(500).json({ error: err })
             })
         }).catch(err => {
-            res.status(500).json({ error: error })
+            res.status(500).json({ error: err })
         })
     });
 
     app.get("/api/channels/:group", function (req, res) {
         if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
-        const channel = req.body
         db.Member.findOne({
             where: {
                 group: req.params.group,
@@ -46,10 +45,10 @@ module.exports = function (app) {
                     return channel.mapData
                 }) })
             }).catch(err => {
-                res.status(500).json({ error: error })
+                res.status(500).json({ error: err })
             })
         }).catch(err => {
-            res.status(500).json({ error: error })
+            res.status(500).json({ error: err })
         })
     });
 
