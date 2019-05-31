@@ -12,6 +12,7 @@ $(document).on("submit", "form.ajaxForm", function (e) {
     }).then(function (response) {
         console.log(response);
         form[0].reset();
+        form.trigger("success", [response])
     }).catch(function (error) {
         console.log(error);
     });
