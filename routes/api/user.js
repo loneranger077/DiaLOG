@@ -13,7 +13,11 @@ module.exports = function (app) {
             password: user.password,
             active: true
         }).then(() => {
-            res.status(200).json({ success: true })
+            sessionHelper.verify(req, user.username, user.password).then((user) => {
+                res.status(200).json({ success: true, uid: user })
+            }).catch(error => {
+                res.status(500).json({ error: error })
+            })
         }).catch(error => {
             res.status(500).json({ error: error })
         })
@@ -26,6 +30,27 @@ module.exports = function (app) {
         }).catch(error => {
             res.status(500).json({ error: error })
         })
+    });
+
+    app.post("/api/logout", function (req, res) {
+        try {
+            req.session.destroy()
+            res.status(200).json({ success: true })
+        } catch (error) {
+            res.status(500).json({ error: error })
+        }
+    });
+
+    app.get("/api/session", function (req, res) {
+        try {
+            if (!sessionHelper.active(req)) {
+                res.status(200).json({ active: false })
+            }else{
+                res.status(200).json({ active: true })
+            }
+        } catch (error) {
+            res.status(500).json({ error: error })
+        }
     });
 
 };

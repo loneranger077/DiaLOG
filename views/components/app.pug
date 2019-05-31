@@ -1,12 +1,13 @@
 include createGroup.pug
 include createChannel.pug
 include addMember.pug
+include login.pug
 
 #header
     nav.navbar.navbar-dark.bg-dark.justify-content-between
         a.navbar-brand(href="/app") DiaLOG
-        .d-inline
-            a.btn.btn-secondary.my-2.my-sm-0(href="/logout") Logout
+        form#logout-form.ajaxForm.d-inline(method="POST" action="/api/logout")
+            a.btn.btn-secondary.my-2.my-sm-0.action-button#logout-button(href="/logout" data-action="logout") Logout
 
 .d-flex.flex-row.h-view
     #groups.h-100

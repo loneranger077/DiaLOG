@@ -26,19 +26,6 @@ module.exports = function (app) {
         }
     });
 
-    app.get("/login", function (req, res) {
-        res.render("components/login", function (err, html) {
-            fs.readFile(path.join(__dirname, "../../views/components/scripts/login.js"), "utf8", (err, data) => {
-                if (err) throw err;
-                res.render("template", {
-                    title: "Login",
-                    content: html,
-                    scripts: data
-                });
-            });
-        });
-    });
-
     app.get("/app", function (req, res) {
         res.render("components/app", function (err, html) {
             fs.readFile(path.join(__dirname, "../../views/components/scripts/app.js"), "utf8", (err, data) => {
