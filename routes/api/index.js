@@ -6,4 +6,5 @@ module.exports = function (app) {
     require("./group.js")(app);
     require("./channel.js")(app);
     require("./message.js")(app);
+    require("./member.js")(app);
 };

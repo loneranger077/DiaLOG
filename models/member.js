@@ -13,7 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: { model: 'Groups', key: 'id' }
     }
-  }, {});
+  }, {
+    getterMethods: {
+      mapData() {
+        return { id: this.id, user: this.user, group: this.group }
+      }
+    }
+  });
   Member.associate = function(models) {
     // associations can be defined here
     this.belongsTo(models.User, {
