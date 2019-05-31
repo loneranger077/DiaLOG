@@ -1,14 +1,17 @@
-.row
-    .col-2
-    .col-8.card.m-4.p-4
-        form.ajaxForm.loginForm(method="POST" action="/api/groups" data-state="login")
-            h2 Create a Group
-            .form-group
-                label(for='userNameInput') Group Name
-                input#userNameInput.form-control(type='text' name="name" placeholder='Group name')
-            .form-group
-                label(for='userDescriptionInput') Description
-                input#userDescriptionInput.form-control(type='text' name="description" placeholder='Description')
-            .d-flex.justify-content-between.align-content-center
-                button.btn.btn-primary.actionButton.ml-2(type='submit') Submit
-    .col-2
+#createGroupModal.modal.fade(tabindex='-1' role='dialog')
+    .modal-dialog.modal-dialog-centered(role='document')
+        form.modal-content.ajaxForm.loginForm(method="POST" action="/api/groups")
+            .modal-header
+                h5#createGroupModalLongTitle.modal-title Create a Group
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                span(aria-hidden='true') &times;
+            .modal-body
+                .form-group
+                    label(for='userNameInput') Group Name
+                    input#userNameInput.form-control(type='text' name="name" placeholder='Group name')
+                .form-group
+                    label(for='userDescriptionInput') Description
+                    input#userDescriptionInput.form-control(type='text' name="description" placeholder='Description')
+            .modal-footer
+                button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                button.btn.btn-primary(type='submit') Submit

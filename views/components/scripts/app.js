@@ -1,9 +1,11 @@
 $(document).ready(function(){
 
     const groupsContainer = $("#groups > ul")
+    const channelsDrawer = $("#channels").hide()
     const channelsContainer = $("#channels > ul")
     const messagesContainer = $("#view > .messages > .list-group")
     const messageForm = $("#message-form")
+    const createChannelButton = $("#create-channel-button")
 
     const buildButton = (link, text, action) => {
         const buttonContainer = $("<li>").addClass("nav-item")
@@ -58,12 +60,28 @@ $(document).ready(function(){
         })
     }
 
-    const createGroup = () => {
+    const createGroup = (link) => {
+        return new Promise(function (resolve, reject) {
+            const modal = $("#createGroupModal")
+            modal.modal('show')
 
+            modal.find("form").on("success", function (e, result) {
+                modal.modal('hide')
+                resolve(result.group)
+            })
+        })
     }
 
     const createChannel = (link) => {
+        return new Promise(function (resolve, reject) {
+            const modal = $("#createChannelModal")
+            modal.modal('show')
 
+            modal.find("form").attr("action", link).on("success", function (e, result) {
+                modal.modal('hide')
+                resolve(result.channel)
+            })
+        })
     }
 
     const addMember = (link) => {
@@ -107,11 +125,22 @@ $(document).ready(function(){
                 groupsContainer.find(".action-button").removeClass("active")
                 getChannels(link).then(channels => { renderChannels(channels) })
                 messageForm.attr("action", "")  
+                createChannelButton.attr("href", link)
+                channelsDrawer.show()
                 break;
             case "messages":
                 channelsContainer.find(".action-button").removeClass("active")
                 getMessages(link).then(messages => { renderMessages(messages) })
                 messageForm.attr("action", link)  
+                break;
+            case "createGroup":
+                createGroup(link).then(group => {
+                    groupsContainer.append(buildButton(group.channelsAPIPath, group.name, "channels"))
+                })
+            case "createChannel":
+                createChannel(link).then(channel => {
+                    channelsContainer.append(buildButton(channel.messagesAPIPath, channel.name, "messages"))
+                })
                 break;
         }
         button.addClass("active")
