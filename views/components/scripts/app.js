@@ -218,6 +218,7 @@ $(document).ready(function(){
                 createGroup().then(group => {
                     groupsContainer.append(buildButton(group.channelsAPIPath, group.name, "channels", group.id))
                 })
+                break;
             case "createChannel":
                 createChannel(channelsLink(context)).then(channel => {
                     channelsContainer.append(buildButton(channel.messagesAPIPath, channel.name, "messages", channel.id))

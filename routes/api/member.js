@@ -19,10 +19,10 @@ module.exports = function (app) {
             }).then(member => {
                 res.status(200).json({ success: true, member: member.mapData })
             }).catch(err => {
-                res.status(500).json({ error: error })
+                res.status(500).json({ error: err })
             })
         }).catch(err => {
-            res.status(500).json({ error: error })
+            res.status(500).json({ error: err })
         })
     });
 
@@ -40,7 +40,7 @@ module.exports = function (app) {
                 })
             })
         }).catch(err => {
-            res.status(500).json({ error: error })
+            res.status(500).json({ error: err })
         })
     });
 
