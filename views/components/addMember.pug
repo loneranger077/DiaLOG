@@ -1,0 +1,14 @@
+#addMemberModal.modal.fade(tabindex='-1' role='dialog')
+    .modal-dialog.modal-dialog-centered(role='document')
+        form.modal-content.ajaxForm.loginForm(method="POST" action="/api/members")
+            .modal-header
+                h5#addMemberModalLongTitle.modal-title Add a member
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                span(aria-hidden='true') &times;
+            .modal-body
+                .form-group
+                    label(for='userUsernameInput') Username
+                    input#userNameInput.form-control(type='text' name="username" placeholder='Username')
+            .modal-footer
+                button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                button.btn.btn-primary(type='submit') Submit
