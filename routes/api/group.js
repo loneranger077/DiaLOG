@@ -18,7 +18,7 @@ module.exports = function (app) {
                 group: group.id,
                 user: group.user
             }).then(() => {
-                res.status(200).json({ success: true })
+                res.status(200).json({ success: true, group: group.mapData })
             }).catch(error => {
                 res.status(500).json({ error: error })
             });
@@ -33,7 +33,7 @@ module.exports = function (app) {
         };
         sessionHelper.getGroups(req).then(function (groups) {
             const array = groups.map(function (group) {
-                return { id: group.id, name: group.name, description: group.description, channelsAPIPath: group.channelsAPIPath }
+                return group.mapData
             });
             res.status(200).json({ success: true, groups: array })
         }).catch(error => {

@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       getterMethods: {
         messagesAPIPath() {
           return `/api/messages/${this.id}`
+        },
+        mapData (){
+          return { id: this.id, name: this.name, messagesAPIPath: this.messagesAPIPath }
         }
       }
   });

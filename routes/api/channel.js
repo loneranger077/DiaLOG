@@ -19,7 +19,7 @@ module.exports = function (app) {
                 description: channel.description,
                 group: member.group
             }).then(channel => {
-                res.status(200).json({ success: true, cid: channel.id })
+                res.status(200).json({ success: true, channel: channel.mapData })
             }).catch(err => {
                 res.status(500).json({ error: error })
             })
@@ -43,7 +43,7 @@ module.exports = function (app) {
                 }
             }).then(channels => {
                 res.status(200).json({ success: true, channels: channels.map(channel => {
-                    return { id: channel.id, name: channel.name, messagesAPIPath: channel.messagesAPIPath}
+                    return channel.mapData
                 }) })
             }).catch(err => {
                 res.status(500).json({ error: error })
