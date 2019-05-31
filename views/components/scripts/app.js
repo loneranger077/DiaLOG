@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
     const groupsContainer = $("#groups > ul")
     const channelsDrawer = $("#channels").hide()
@@ -8,6 +8,20 @@ $(document).ready(function(){
     const createChannelButton = $("#create-channel-button")
     const addMemberButton = $("#add-member-button")
     const logoutForm = $("#logout-form")
+
+    const registerSocket = () => {
+        const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
+        const echoSocketUrl = socketProtocol + '//' + window.location.hostname + ':3000/ws'
+        const socket = new WebSocket(echoSocketUrl);
+
+        socket.onopen = () => {
+            socket.send('Here\'s some text that the server is urgently awaiting!');
+        }
+
+        socket.onmessage = e => {
+            console.log('Message from server:', event.data)
+        }
+    }
 
     const buildButton = (link, text, action, id) => {
         const buttonContainer = $("<li>").addClass("nav-item")
@@ -182,10 +196,16 @@ $(document).ready(function(){
     }
 
     checkSession().then(session => {
-        if (session){
+        if (session) {
             getGroups().then(groups => { renderGroups(groups) })
-        }else{
-            login().then(result => { getGroups().then(groups => { renderGroups(groups) }) })
+            registerSocket()
+        } else {
+            login().then(result => {
+                getGroups().then(groups => {
+                    renderGroups(groups)
+                    registerSocket()
+                })
+            })
         }
     })
 
@@ -195,7 +215,7 @@ $(document).ready(function(){
     const channelsLink = (group) => { return `/api/channels/${group}` }
     const messagesLink = (channel) => { return `/api/messages/${channel}` }
 
-    $(document).on("click", ".action-button", function(e){
+    $(document).on("click", ".action-button", function (e) {
         e.preventDefault()
         const button = $(this)
         const action = button.attr("data-action")
@@ -212,7 +232,7 @@ $(document).ready(function(){
             case "messages":
                 channelsContainer.find(".action-button").removeClass("active")
                 getMessages(messagesLink(context)).then(messages => { renderMessages(messages) })
-                messageForm.attr("action", messagesLink(context))  
+                messageForm.attr("action", messagesLink(context))
                 break;
             case "createGroup":
                 createGroup().then(group => {
