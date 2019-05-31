@@ -32,7 +32,19 @@ module.exports = function (app) {
         try {
             req.session.destroy()
             res.status(200).json({ success: true })
-        }catch (error){
+        } catch (error) {
+            res.status(500).json({ error: error })
+        }
+    });
+
+    app.get("/api/session", function (req, res) {
+        try {
+            if (!sessionHelper.active(req)) {
+                res.status(200).json({ active: false })
+            }else{
+                res.status(200).json({ active: true })
+            }
+        } catch (error) {
             res.status(500).json({ error: error })
         }
     });

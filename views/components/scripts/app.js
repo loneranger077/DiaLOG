@@ -132,8 +132,6 @@ $(document).ready(function(){
         })
     }
 
-
-
     const logout = () => {
         return new Promise(function (resolve, reject) {
             logoutForm.submit()
@@ -144,11 +142,25 @@ $(document).ready(function(){
         })
     }
 
+    const checkSession = () => {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: "/api/session",
+                method: "GET"
+            }).then(function (response) {
+                resolve(response.active);
+            }).catch(function (error) {
+                reject(error);
+            });
+        })
+    }
+
     const sendMessage = (link) => {
 
     }
 
     const renderGroups = (groups) => {
+        groupsContainer.find("li:not(.static)").remove()
         for (group of groups) {
             groupsContainer.append(buildButton(group.channelsAPIPath, group.name, "channels", group.id))
         }
@@ -169,8 +181,13 @@ $(document).ready(function(){
         }
     }
 
-    getGroups().then(groups => { renderGroups(groups) })
-
+    checkSession().then(session => {
+        if (session){
+            getGroups().then(groups => { renderGroups(groups) })
+        }else{
+            login().then(result => { getGroups().then(groups => { renderGroups(groups) }) })
+        }
+    })
 
 
     const groupsLink = (channel) => { return `/api/groups` }
@@ -215,6 +232,7 @@ $(document).ready(function(){
                 logout().then(result => {
                     login().then(result => {
                         //TODO Success
+                        getGroups().then(groups => { renderGroups(groups) })
                     })
                 })
                 break;
