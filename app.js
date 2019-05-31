@@ -36,7 +36,7 @@ app.set('views', './views')
 
 // Routes
 app.use(express.static("./public"));
-require("./routes")(app, wss);
+require("./routes")(app);
 
 // Starts the server to begin listening
 app.listen(PORT, function () {

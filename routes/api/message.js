@@ -1,9 +1,10 @@
 const path = require("path");
 const sessionHelper = require("../../helpers/session.js")
+const socketHelper = require("../../helpers/socket.js")
 
 const db = require("../../models")
 
-module.exports = function (app) {
+module.exports = function (app, sockets) {
 
     app.get("/api/messages/:channel", function (req, res) {
         if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
@@ -36,6 +37,7 @@ module.exports = function (app) {
                 user: sessionHelper.active(req),
                 group: channel.group
             }).then(message => {
+                socketHelper.send("message", message.body, message.group, sockets)
                 res.status(200).json({success: true, mid: message.id})
             }).catch(err => {
                 res.status(500).json({ error: err })

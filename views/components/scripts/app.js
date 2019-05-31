@@ -9,18 +9,10 @@ $(document).ready(function () {
     const addMemberButton = $("#add-member-button")
     const logoutForm = $("#logout-form")
 
-    const registerSocket = () => {
-        const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
-        const echoSocketUrl = socketProtocol + '//' + window.location.hostname + ':3000/ws'
-        const socket = new WebSocket(echoSocketUrl);
-
-        socket.onopen = () => {
-            socket.send('Here\'s some text that the server is urgently awaiting!');
-        }
-
-        socket.onmessage = e => {
-            console.log('Message from server:', event.data)
-        }
+    function SocketConnection(path) {
+        this.socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
+        this.socketUrl = `${this.socketProtocol}//${window.location.hostname}:${location.port}${path}`
+        this.socket = new WebSocket(this.socketUrl);
     }
 
     const buildButton = (link, text, action, id) => {
@@ -195,69 +187,97 @@ $(document).ready(function () {
         }
     }
 
+    const groupsLink = (channel) => { return `/api/groups` }
+    const groupsWSLink = (group) => { return `/ws/groups/${group}` }
+    const WSLink = () => { return `/ws` }
+    const membersLink = (group) => { return `/api/members/${group}` }
+    const channelsLink = (group) => { return `/api/channels/${group}` }
+    const messagesLink = (channel) => { return `/api/messages/${channel}` }
+
+    const listeners = () => {
+
+        const genConnection = new SocketConnection(WSLink())
+
+        genConnection.socket.onmessage = (e) => {
+            console.log(e);
+        }
+
+        let groupConnection;
+
+        $(document).on("click", ".action-button", function (e) {
+            e.preventDefault()
+            const button = $(this)
+            const action = button.attr("data-action")
+            const context = button.attr("data-context")
+            switch (action) {
+                case "channels":
+                    if (groupConnection && groupConnection.socket.readyState < 2) groupConnection.socket.close()
+
+                    groupConnection = new SocketConnection(groupsWSLink(context))
+
+                    groupConnection.socket.onmessage = (e) => {
+                        const msg = JSON.parse(e.data)
+                        switch (msg.type) {
+                            case "message":
+                                messagesContainer.prepend(buildMessage(msg.body))
+                                break;
+                            case "channel":
+                                channelsContainer.append(buildButton(msg.body.messagesAPIPath, msg.body.name, "messages", msg.body.id))
+                                break;
+                            case "member":
+                                channelsContainer.append(buildButton(msg.body.messagesAPIPath, msg.body.name, "messages", msg.body.id))
+                                break;
+                        }
+                    }
+
+                    groupsContainer.find(".action-button").removeClass("active")
+                    getChannels(channelsLink(context)).then(channels => { renderChannels(channels) })
+                    messageForm.attr("action", "")
+                    createChannelButton.attr("href", channelsLink(context)).attr("data-context", context)
+                    addMemberButton.attr("href", membersLink(context)).attr("data-context", context)
+                    channelsDrawer.show()
+                    break;
+                case "messages":
+                    channelsContainer.find(".action-button").removeClass("active")
+                    getMessages(messagesLink(context)).then(messages => { renderMessages(messages) })
+                    messageForm.attr("action", messagesLink(context))
+                    break;
+                case "createGroup":
+                    createGroup().then(group => { })
+                    break;
+                case "createChannel":
+                    createChannel(channelsLink(context)).then(channel => { })
+                    break;
+                case "addMember":
+                    addMember(membersLink(context)).then(member => {
+                        //TODO Success
+                    })
+                    break;
+                case "logout":
+                    logout().then(result => {
+                        login().then(result => {
+                            //TODO Success
+                            getGroups().then(groups => { renderGroups(groups) })
+                        })
+                    })
+                    break;
+            }
+            button.addClass("active")
+        })
+    }
+
     checkSession().then(session => {
         if (session) {
             getGroups().then(groups => { renderGroups(groups) })
-            registerSocket()
+            listeners()
         } else {
             login().then(result => {
                 getGroups().then(groups => {
                     renderGroups(groups)
-                    registerSocket()
+                    listeners()
                 })
             })
         }
     })
 
-
-    const groupsLink = (channel) => { return `/api/groups` }
-    const membersLink = (group) => { return `/api/members/${group}` }
-    const channelsLink = (group) => { return `/api/channels/${group}` }
-    const messagesLink = (channel) => { return `/api/messages/${channel}` }
-
-    $(document).on("click", ".action-button", function (e) {
-        e.preventDefault()
-        const button = $(this)
-        const action = button.attr("data-action")
-        const context = button.attr("data-context")
-        switch (action) {
-            case "channels":
-                groupsContainer.find(".action-button").removeClass("active")
-                getChannels(channelsLink(context)).then(channels => { renderChannels(channels) })
-                messageForm.attr("action", "")
-                createChannelButton.attr("href", channelsLink(context)).attr("data-context", context)
-                addMemberButton.attr("href", membersLink(context)).attr("data-context", context)
-                channelsDrawer.show()
-                break;
-            case "messages":
-                channelsContainer.find(".action-button").removeClass("active")
-                getMessages(messagesLink(context)).then(messages => { renderMessages(messages) })
-                messageForm.attr("action", messagesLink(context))
-                break;
-            case "createGroup":
-                createGroup().then(group => {
-                    groupsContainer.append(buildButton(group.channelsAPIPath, group.name, "channels", group.id))
-                })
-                break;
-            case "createChannel":
-                createChannel(channelsLink(context)).then(channel => {
-                    channelsContainer.append(buildButton(channel.messagesAPIPath, channel.name, "messages", channel.id))
-                })
-                break;
-            case "addMember":
-                addMember(membersLink(context)).then(member => {
-                    //TODO Success
-                })
-                break;
-            case "logout":
-                logout().then(result => {
-                    login().then(result => {
-                        //TODO Success
-                        getGroups().then(groups => { renderGroups(groups) })
-                    })
-                })
-                break;
-        }
-        button.addClass("active")
-    })
 })

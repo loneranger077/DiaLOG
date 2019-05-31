@@ -3,7 +3,7 @@ const sessionHelper = require("../../helpers/session.js")
 
 const db = require("../../models")
 
-module.exports = function (app) {
+module.exports = function (app, sockets) {
     
     app.post("/api/groups", function (req, res) {
         if (!sessionHelper.active(req)) {
