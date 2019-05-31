@@ -58,8 +58,16 @@ $(document).ready(function(){
         })
     }
 
-    const createGroup = () => {
+    const createGroup = (link) => {
+        return new Promise(function (resolve, reject) {
+            const modal = $("#createGroupModal")
+            modal.modal('show')
 
+            modal.find("form").on("success", function (e, result) {
+                modal.modal('hide')
+                resolve(result.group)
+            })
+        })
     }
 
     const createChannel = (link) => {
@@ -112,6 +120,11 @@ $(document).ready(function(){
                 channelsContainer.find(".action-button").removeClass("active")
                 getMessages(link).then(messages => { renderMessages(messages) })
                 messageForm.attr("action", link)  
+                break;
+            case "createGroup":
+                createGroup(link).then(group => {
+                    groupsContainer.append(buildButton(group.channelsAPIPath, group.name, "channels"))
+                })
                 break;
         }
         button.addClass("active")
