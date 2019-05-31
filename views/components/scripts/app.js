@@ -6,6 +6,7 @@ $(document).ready(function(){
     const messagesContainer = $("#view > .messages > .list-group")
     const messageForm = $("#message-form")
     const createChannelButton = $("#create-channel-button")
+    const addMemberButton = $("#add-member-button")
 
     const buildButton = (link, text, action) => {
         const buttonContainer = $("<li>").addClass("nav-item")
