@@ -1,8 +1,7 @@
 const path = require("path");
-const sessionHelper = require("../../helpers/session.js")
-const socketHelper = require("../../helpers/socket.js")
+const sessionHelper = require(rootPath + "/session/sessionController")
 
-const db = require("../../models")
+const db = require(rootPath + "/models")
 
 module.exports = function (app, sockets) {
 

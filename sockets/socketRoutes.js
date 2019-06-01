@@ -1,6 +1,3 @@
-const path = require("path");
-const sessionHelper = require("../../helpers/session.js");
-
 module.exports = function (app) {
     this.clients = []
 
@@ -23,7 +20,6 @@ module.exports = function (app) {
             }
         })
     })
-
 
     this.groups = {}
 
