@@ -20,7 +20,7 @@ module.exports = function (app, sockets) {
                 description: channel.description,
                 group: member.group
             }).then(channel => {
-                socketHelper.send("channel", channel.mapData, channel.group, sockets)
+                socketHelper.send("channel", channel.mapData, channel.group, channel.group, sockets)
                 res.status(200).json({ success: true, channel: channel.mapData })
             }).catch(err => {
                 res.status(500).json({ error: err })

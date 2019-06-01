@@ -37,7 +37,7 @@ module.exports = function (app, sockets) {
                 user: sessionHelper.active(req),
                 group: channel.group
             }).then(message => {
-                socketHelper.send("message", message.body, message.group, sockets)
+                socketHelper.send("message", message.body, message.channel, message.group, sockets)
                 res.status(200).json({success: true, mid: message.id})
             }).catch(err => {
                 res.status(500).json({ error: err })

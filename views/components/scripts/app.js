@@ -203,6 +203,8 @@ $(document).ready(function () {
         }
 
         let groupConnection;
+        let currentGroup;
+        let currentChannel;
 
         $(document).on("click", ".action-button", function (e) {
             e.preventDefault()
@@ -214,12 +216,13 @@ $(document).ready(function () {
                     if (groupConnection && groupConnection.socket.readyState < 2) groupConnection.socket.close()
 
                     groupConnection = new SocketConnection(groupsWSLink(context))
+                    currentGroup = context;
 
                     groupConnection.socket.onmessage = (e) => {
                         const msg = JSON.parse(e.data)
                         switch (msg.type) {
                             case "message":
-                                messagesContainer.prepend(buildMessage(msg.body))
+                                if (currentChannel == msg.context) messagesContainer.prepend(buildMessage(msg.body))
                                 break;
                             case "channel":
                                 channelsContainer.append(buildButton(msg.body.messagesAPIPath, msg.body.name, "messages", msg.body.id))
@@ -238,6 +241,7 @@ $(document).ready(function () {
                     channelsDrawer.show()
                     break;
                 case "messages":
+                    currentChannel = context;
                     channelsContainer.find(".action-button").removeClass("active")
                     getMessages(messagesLink(context)).then(messages => { renderMessages(messages) })
                     messageForm.attr("action", messagesLink(context))

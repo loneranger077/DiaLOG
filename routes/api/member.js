@@ -1,5 +1,6 @@
 const path = require("path");
 const sessionHelper = require("../../helpers/session.js")
+const socketHelper = require("../../helpers/socket.js")
 
 const db = require("../../models")
 
