@@ -177,7 +177,11 @@ $(document).ready(function () {
             }).then(function (response) {
                 resolve(response.active);
             }).catch(function (error) {
-                reject(error);
+                if (error.responseJSON.active === false) {
+                    resolve(false);
+                }else{
+                    reject(error);
+                }
             });
         })
     }

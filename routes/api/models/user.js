@@ -39,7 +39,7 @@ module.exports = function (app) {
         session.user(req).then(user => {
             res.status(200).json({ active: true, user: user.mapData })
         }).catch(error => {
-            res.status(404).json({ error: error })
+            res.status(404).json((error) ? { error: error } : { active : false })
         })
     });
 

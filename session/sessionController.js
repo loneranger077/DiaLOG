@@ -20,7 +20,8 @@ module.exports = {
     },
     user: req => {
         return new Promise(function (resolve, reject) {
-            if (!req.session.userID) reject("Session not active")
+            if (!req.session.userID) return reject(false)
+            console.log(req.session.userID);
             db.User.findOne({
                 where: {
                     id: req.session.userID
