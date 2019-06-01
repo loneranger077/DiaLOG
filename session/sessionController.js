@@ -29,5 +29,11 @@ module.exports = {
                 resolve(user)
             })
         });
+    },
+    destroy: req => {
+        return new Promise(function (resolve, reject) {
+            req.session.destroy()
+            resolve(true)
+        });
     }
 };

@@ -1,56 +1,46 @@
-const path = require("path");
-const sessionHelper = require(rootPath + "/session/sessionController")
+const session = require(rootPath + "/session/sessionController")
 
 const db = require(rootPath + "/models")
 
 module.exports = function (app) {
 
     app.post("/api/users", function (req, res) {
-        const user = req.body
-        if (user.password !== user.passwordConfirm) return res.status(500).json({ error: { message: "Passwords do not match" } })
+        if (req.body.password !== req.body.passwordConfirm) return res.status(500).json({ error: { message: "Passwords do not match" } })
         db.User.create({
-            username: user.username,
-            password: user.password,
+            username: req.body.username,
+            password: req.body.password,
             active: true
         }).then(() => {
-            sessionHelper.verify(req, user.username, user.password).then((user) => {
-                res.status(200).json({ success: true, uid: user })
-            }).catch(err => {
-                res.status(500).json({ error: err })
+            session.activate(req, req.body.username, req.body.password).then((user) => {
+                res.status(200).json({ success: true, user: user })
             })
-        }).catch(err => {
-            res.status(500).json({ error: err })
+        }).catch(error => {
+            res.status(500).json({ error: error })
         })
     });
 
     app.post("/api/login", function (req, res) {
-        const form = req.body
-        sessionHelper.verify(req, form.username, form.password).then((user) => {
-            res.status(200).json({ success: true, uid: user })
-        }).catch(err => {
-            res.status(500).json({ error: err })
+        session.activate(req, req.body.username, req.body.password).then((user) => {
+            res.status(200).json({ success: true, user: user })
+        }).catch(error => {
+            res.status(500).json({ error: error })
         })
     });
 
     app.post("/api/logout", function (req, res) {
-        try {
-            req.session.destroy()
-            res.status(200).json({ success: true })
-        } catch (err) {
-            res.status(500).json({ error: err })
-        }
+        session.destroy(req).then(success => {
+            res.status(200).json({ success: success})
+        }).catch(error => {
+            res.status(500).json({ error: error })
+        })
     });
 
     app.get("/api/session", function (req, res) {
-        try {
-            if (!sessionHelper.active(req)) {
-                res.status(200).json({ active: false })
-            }else{
-                res.status(200).json({ active: true })
-            }
-        } catch (err) {
-            res.status(500).json({ error: err })
-        }
+        session.user(req).then(user => {
+            res.status(200).json({ active: true, user: user.mapData })
+        }).catch(error => {
+            res.status(404).json({ error: error })
+        })
     });
 
 };

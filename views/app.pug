@@ -12,10 +12,10 @@ head
 // Navbar
 // Content
 #wrap.h-100
-  include createGroup.pug
-  include createChannel.pug
-  include addMember.pug
-  include login.pug
+  include components/createGroup.pug
+  include components/createChannel.pug
+  include components/addMember.pug
+  include components/login.pug
 
   #header
       nav.navbar.navbar-dark.bg-dark.justify-content-between
@@ -45,4 +45,4 @@ link(rel='stylesheet' href='https://use.fontawesome.com/releases/v5.8.2/css/all.
 script(src='https://code.jquery.com/jquery-3.3.1.min.js')
 script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js')
 script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js')
-script(src='/js/app.js')
+script(src='/js/scripts.js')

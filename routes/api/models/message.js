@@ -1,49 +1,59 @@
-const path = require("path");
-const sessionHelper = require(rootPath + "/session/sessionController")
+const session = require(rootPath + "/session/sessionController")
 
 const db = require(rootPath + "/models")
 
-module.exports = function (app, sockets) {
-
-    app.get("/api/messages/:channel", function (req, res) {
-        if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
-        db.Message.findAll({
-            where: {
-                channel: req.params.channel
-            }
-        }).then(messages => {
-            res.status(200).json({
-                success: true, messages: messages.map(message => {
-                    return { id: message.id, body: message.body }
-                })
-            })
-        }).catch(err => {
-            res.status(500).json({ error: error })
-        })
-    });
+module.exports = function (app, socket) {
 
     app.post("/api/messages/:channel", function (req, res) {
-        if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
-        const message = req.body
-        db.Channel.findOne({
-            where: {
-                id: req.params.channel
-            }
-        }).then(channel => {
-            db.Message.create({
-                channel: channel.id,
-                body: message.body,
-                user: sessionHelper.active(req),
-                group: channel.group
-            }).then(message => {
-                socketHelper.send("message", message.body, message.channel, message.group, sockets)
-                res.status(200).json({success: true, mid: message.id})
-            }).catch(err => {
-                res.status(500).json({ error: err })
+        session.user(req).then(sessionUser => {
+            db.Channel.findOne({
+                where: { id: req.params.channel },
+                include: [{
+                    model: db.Group,
+                    include: [{
+                        model: db.Member,
+                        where: { user: sessionUser.id }
+                    }]
+                }]
+            }).then(channel => {
+                channel.createMessage({
+                    body: req.body.body,
+                    user: sessionUser.id,
+                    group: channel.group
+                }).then(message => {
+                    socket.send("message", message.body, message.group, message.channel)
+                    res.status(200).json({ success: true, message: message.mapData })
+                })
             })
-        }).catch(err => {
-            res.status(500).json({ error: err })
-        })
+        }).catch(error => {
+            res.status(500).json({ error: error })
+        });
+    });
+
+    app.get("/api/messages/:channel", function (req, res) {
+        session.user(req).then(sessionUser => {
+            db.Message.findAll({
+                include: [{
+                    model: db.Channel,
+                    where: { id: req.params.channel },
+                    include: [{
+                        model: db.Group,
+                        include: [{
+                            model: db.Member,
+                            where: { user: sessionUser.id }
+                        }]
+                    }]
+                }]
+            }).then(messages => {
+                res.status(200).json({
+                    success: true, messages: messages.map(function (message) {
+                        return message.mapData
+                    })
+                })
+            })
+        }).catch(error => {
+            res.status(500).json({ error: error })
+        });
     });
 
 };

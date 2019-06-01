@@ -23,8 +23,14 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING
     }
-  }, {});
-  Message.associate = function(models) {
+  }, {
+      getterMethods: {
+        mapData() {
+          return { id: this.id, body: this.body }
+        }
+      }
+    });
+  Message.associate = function (models) {
     // associations can be defined here
     this.belongsTo(models.User, {
       foreignKey: 'user',

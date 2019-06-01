@@ -1,48 +1,55 @@
-const path = require("path");
-const sessionHelper = require(rootPath + "/session/sessionController")
+const session = require(rootPath + "/session/sessionController")
 
 const db = require(rootPath + "/models")
 
-module.exports = function (app, sockets) {
+module.exports = function (app, socket) {
 
     app.post("/api/members/:group", function (req, res) {
-        if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
-        const member = req.body
-        db.User.findOne({
-            where: {
-                username: member.username
-            }
-        }).then(user => {
-            db.Member.create({
-                user: user.id,
-                group: req.params.group
-            }).then(member => {
-                 member.getGroup().then(group => {
-                     socketHelper.sendToUser("member", group.mapData, member.id, member.user, sockets)
-                     res.status(200).json({ success: true, member: member.mapData })
-                 })
+        session.user(req).then(sessionUser => {
+            db.Group.findOne({
+                where: { id: req.params.group },
+                include: [{
+                    model: db.Member,
+                    where: { user: sessionUser.id }
+                }]
+            }).then(group => {
+                db.User.findOne({
+                    where: { username: req.body.username }
+                }).then(user => {
+                    group.createMember({
+                        user: user.id
+                    }).then(member => {
+                        socketHelper.sendToUser("member", group.mapData, member.user)
+                        res.status(200).json({ success: true, member: member.mapData })
+                    })
+                })
             })
-        }).catch(err => {
-            res.status(500).json({ error: err })
-        })
+        }).catch(error => {
+            res.status(500).json({ error: error })
+        });
     });
 
     app.get("/api/members/:group", function (req, res) {
-        if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
-        const channel = req.body
-        db.Member.findAll({
-            where: {
-                group: req.params.group
-            }
-        }).then(members => {
-            res.status(200).json({
-                success: true, members: members.map(member => {
-                    return member.mapData
+        session.user(req).then(sessionUser => {
+            db.Member.findAll({
+                include: [{
+                    model: db.Group,
+                    where: { id: req.params.group },
+                    include: [{
+                        model: db.Member,
+                        where: { user: sessionUser.id }
+                    }]
+                }]
+            }).then(members => {
+                res.status(200).json({
+                    success: true, members: members.map(function (member) {
+                        return member.mapData
+                    })
                 })
             })
-        }).catch(err => {
-            res.status(500).json({ error: err })
-        })
+        }).catch(error => {
+            res.status(500).json({ error: error })
+        });
     });
 
 };
