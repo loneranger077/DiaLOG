@@ -1,5 +1,6 @@
 const path = require("path");
 const sessionHelper = require("../../helpers/session.js")
+const socketHelper = require("../../helpers/socket.js")
 
 const db = require("../../models")
 
@@ -17,8 +18,11 @@ module.exports = function (app, sockets) {
             db.Member.create({
                 group: group.id,
                 user: group.user
-            }).then(() => {
-                res.status(200).json({ success: true, group: group.mapData })
+            }).then((member) => {
+                member.getGroup().then(group => {
+                    socketHelper.sendToUser("member", group.mapData, member.id, member.user, sockets)
+                    res.status(200).json({ success: true, group: group.mapData })
+                })
             }).catch(err => {
                 res.status(500).json({ error: err })
             });

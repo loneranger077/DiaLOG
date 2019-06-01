@@ -199,7 +199,12 @@ $(document).ready(function () {
         const genConnection = new SocketConnection(WSLink())
 
         genConnection.socket.onmessage = (e) => {
-            console.log(e);
+            const msg = JSON.parse(e.data)
+            switch (msg.type) {
+                case "member":
+                    groupsContainer.append(buildButton(msg.body.channelsAPIPath, msg.body.name, "channels", msg.body.id))
+                    break;
+            }
         }
 
         let groupConnection;
@@ -225,9 +230,6 @@ $(document).ready(function () {
                                 if (currentChannel == msg.context) messagesContainer.prepend(buildMessage(msg.body))
                                 break;
                             case "channel":
-                                channelsContainer.append(buildButton(msg.body.messagesAPIPath, msg.body.name, "messages", msg.body.id))
-                                break;
-                            case "member":
                                 channelsContainer.append(buildButton(msg.body.messagesAPIPath, msg.body.name, "messages", msg.body.id))
                                 break;
                         }
