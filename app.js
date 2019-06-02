@@ -1,9 +1,12 @@
 const express = require("express")
 require('dotenv').config()
 const session = require('express-session');
+const enableWs = require('express-ws')
 const MySQLStore = require('connect-mysql')(session)
 
 const app = express();
+const wss = enableWs(app)
+
 const PORT = process.env.PORT || 3000;
 
 app.use(session({

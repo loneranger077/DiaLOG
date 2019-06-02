@@ -1,9 +1,10 @@
 const path = require("path");
 const sessionHelper = require("../../helpers/session.js")
+const socketHelper = require("../../helpers/socket.js")
 
 const db = require("../../models")
 
-module.exports = function (app) {
+module.exports = function (app, sockets) {
 
     app.post("/api/members/:group", function (req, res) {
         if (!sessionHelper.active(req)) return res.status(400).json({ error: "not logged in" })
@@ -17,9 +18,10 @@ module.exports = function (app) {
                 user: user.id,
                 group: req.params.group
             }).then(member => {
-                res.status(200).json({ success: true, member: member.mapData })
-            }).catch(err => {
-                res.status(500).json({ error: err })
+                 member.getGroup().then(group => {
+                     socketHelper.sendToUser("member", group.mapData, member.id, member.user, sockets)
+                     res.status(200).json({ success: true, member: member.mapData })
+                 })
             })
         }).catch(err => {
             res.status(500).json({ error: err })
