@@ -5,6 +5,3 @@ body,html{
 .h-view {
     height: calc(100% - 56px);
 }
-.overflow-x-auto {
-    overflow-x: auto
-}

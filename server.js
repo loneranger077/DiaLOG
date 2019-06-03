@@ -1,12 +1,16 @@
 const express = require("express")
-require('dotenv').config()
 const session = require('express-session');
 const enableWs = require('express-ws')
+const Sockets = require("./sockets/socketRoutes");
+const path = require("path")
 const MySQLStore = require('connect-mysql')(session)
+
+require('dotenv').config()
 
 const app = express();
 const wss = enableWs(app)
 
+global.rootPath = path.resolve(__dirname);
 const PORT = process.env.PORT || 3000;
 
 app.use(session({
@@ -36,7 +40,8 @@ app.set('views', './views')
 
 // Routes
 app.use(express.static("./public"));
-require("./routes")(app);
+
+require("./routes/routes")(app, new Sockets(app));
 
 // Starts the server to begin listening
 app.listen(PORT, function () {
