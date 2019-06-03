@@ -5,11 +5,14 @@ const Sockets = require("./sockets/socketRoutes");
 const path = require("path")
 const MySQLStore = require('connect-mysql')(session)
 
+// needed for .env file
 require('dotenv').config()
 
 const app = express();
+// enables the web sockets for express
 const wss = enableWs(app)
 
+// stores the root path in a global variable
 global.rootPath = path.resolve(__dirname);
 const PORT = process.env.PORT || 3000;
 
