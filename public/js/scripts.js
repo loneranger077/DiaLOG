@@ -200,6 +200,13 @@ $(document).ready(function () {
                 }
                 button.addClass("active")
             })
+
+            $(document).on("click", ".edit-channel-button", function (e) {
+
+        }
+
+        $(document).on("click", ".edit-group-button", function (e) {
+
         }
 
         // renders the groups into the groupsContainer
@@ -223,7 +230,7 @@ $(document).ready(function () {
 
         // constructs the message and puts it in the message div
         const buildMessage = (message) => {
-            const messageContainer = $("<li>").addClass("list-group-item").text(message)
+            const messageContainer = $("<li>").addClass("list-group-item").html()
             return messageContainer
         }
 

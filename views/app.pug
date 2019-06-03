@@ -28,10 +28,12 @@ head
           ul.nav.flex-column.navbar-light.bg-light.h-100.border-right.text-nowrap.nav-pills.p-2
               li.nav-item.static
                   a.nav-link.mb-1.btn-secondary.action-button#create-group-button(href="/createGroup" data-action="createGroup") Create Group
+                  a.nav-link.mb-1.btn-secondary.action-button#edit-group-button(href="/editGroup" data-action="editGroup") Edit Group
       #channels.h-100
           ul.nav.flex-column.navbar-light.bg-light.h-100.border-right.text-nowrap.nav-pills.p-2
               li.nav-item.static.d-flex.flex-row
                   a.nav-link.mb-1.btn-secondary.action-button#create-channel-button(href="#" data-action="createChannel") Create Channel
+                  a.nav-link.mb-1.btn-secondary.action-button#edit-channel-button(href="#" data-action="editChannel") Edit Channel
                   a.nav-link.mb-1.btn-light.action-button#add-member-button.ml-1(href="#" data-action="addMember") Add Member
       #view.w-100.h-100.position-relative.d-flex.flex-column
           nav.navbar.w-100.navbar-light.bg-light.border-bottom
