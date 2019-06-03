@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    // submits a form through ajax and triggers the success event
     $(document).on("submit", "form.ajaxForm", function (e) {
         e.preventDefault();
         const form = $(this);
@@ -19,14 +20,17 @@ $(document).ready(function () {
         });
     });
 
+    // creates a socket connection for a given path
     const SocketConnection = function(path) {
         this.socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
         this.socketUrl = `${this.socketProtocol}//${window.location.hostname}:${location.port}${path}`
         this.socket = new WebSocket(this.socketUrl);
     }
 
+    // constructs the app
     const App = function(){
 
+        // selectors for the buttons, forms, and containers
         const groupsContainer = $("#groups > ul")
         const channelsDrawer = $("#channels").hide()
         const channelsContainer = $("#channels > ul")
@@ -36,6 +40,7 @@ $(document).ready(function () {
         const addMemberButton = $("#add-member-button")
         const logoutForm = $("#logout-form")
 
+        //request links for api
         const groupsLink = (channel) => { return `/api/groups` }
         const groupsWSLink = (group) => { return `/ws/groups/${group}` }
         const WSLink = () => { return `/ws` }
@@ -43,6 +48,7 @@ $(document).ready(function () {
         const channelsLink = (group) => { return `/api/channels/${group}` }
         const messagesLink = (channel) => { return `/api/messages/${channel}` }
 
+        // constructs the session 
         this.Session = function() {
 
             this.genSocket;
@@ -52,10 +58,12 @@ $(document).ready(function () {
 
             this.onSocket = (message) => {};
 
+            // renders the groups
             const groups = () => {
                 getGroups().then(groups => { renderGroups(groups) })
             }
             
+            // show login modal
             const login = () => {
                 return loginModal().then(result => {
                     this.refreshGeneralSocket()
@@ -63,12 +71,14 @@ $(document).ready(function () {
                 })
             }
             
+            // logout then show login modal
             this.logout = () => {
                 logout().then(result => {
                     login()
                 })
             }
 
+            // refreshes the general websocket
             this.refreshGeneralSocket = () => {
                 if (this.genSocket && this.genSocket.socket.readyState < 2) this.genSocket.socket.close()
                 this.genSocket = new SocketConnection(WSLink())
@@ -79,6 +89,7 @@ $(document).ready(function () {
                 }
             }
 
+            // refreshes the group websocket
             this.refreshGroupSocket = (group) => {
                 if (this.groupSocket && this.groupSocket.socket.readyState < 2) this.groupSocket.socket.close()
                 this.groupSocket = new SocketConnection(groupsWSLink(group))
@@ -89,6 +100,7 @@ $(document).ready(function () {
                 }
             }
 
+            // checks the status of the server session
             this.check = () => {
                 const context = this
                 return new Promise(function (resolve, reject) {
@@ -113,6 +125,7 @@ $(document).ready(function () {
 
         }
 
+        // initiates the application
         this.start = () => {
 
             const session = new this.Session()
@@ -121,6 +134,7 @@ $(document).ready(function () {
             })
         }
 
+        // listens for input and connects to socketss
         const listeners = (session) => {
 
             const socketHandler = (message) => {
@@ -188,6 +202,7 @@ $(document).ready(function () {
             })
         }
 
+        // renders the groups into the groupsContainer
         const renderGroups = (groups) => {
             groupsContainer.find("li:not(.static)").remove()
             for (group of groups) {
@@ -195,6 +210,7 @@ $(document).ready(function () {
             }
         }
 
+        // constructs the button for channels 
         const buildButton = (link, text, action, id) => {
             const buttonContainer = $("<li>").addClass("nav-item")
             buttonContainer.append($("<a>")
@@ -205,11 +221,13 @@ $(document).ready(function () {
             return buttonContainer
         }
 
+        // constructs the message and puts it in the message div
         const buildMessage = (message) => {
             const messageContainer = $("<li>").addClass("list-group-item").text(message)
             return messageContainer
         }
 
+        // gets the messages for a given channel
         const getMessages = (link) => {
             return new Promise(function (resolve, reject) {
                 $.ajax({
@@ -223,6 +241,7 @@ $(document).ready(function () {
             })
         }
 
+        // gets the channels for a given group
         const getChannels = (link) => {
             return new Promise(function (resolve, reject) {
                 $.ajax({
@@ -236,6 +255,7 @@ $(document).ready(function () {
             })
         }
 
+        // gets the groups for the current session user
         const getGroups = () => {
             return new Promise(function (resolve, reject) {
                 $.ajax({
@@ -249,6 +269,7 @@ $(document).ready(function () {
             })
         }
 
+        // shows the create group modal and waits for form success
         const createGroupModal = () => {
             return new Promise(function (resolve, reject) {
                 const modal = $("#createGroupModal")
@@ -262,6 +283,7 @@ $(document).ready(function () {
             })
         }
 
+        // shows the create channle modal and waits for form success
         const createChannelModal = (link) => {
             return new Promise(function (resolve, reject) {
                 const modal = $("#createChannelModal")
@@ -275,6 +297,7 @@ $(document).ready(function () {
             })
         }
 
+        // shows the add member modal and waits for form success
         const addMemberModal = (link) => {
             return new Promise(function (resolve, reject) {
                 const modal = $("#addMemberModal")
@@ -288,6 +311,7 @@ $(document).ready(function () {
             })
         }
 
+        // shows the login modal and waits for form success
         const loginModal = () => {
             return new Promise(function (resolve, reject) {
                 const modal = $("#loginModal")
@@ -323,6 +347,7 @@ $(document).ready(function () {
             })
         }
 
+        // submits the login form
         const logout = () => {
             return new Promise(function (resolve, reject) {
                 logoutForm.submit()

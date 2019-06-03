@@ -1,6 +1,7 @@
 module.exports = function (app) {
     this.clients = []
 
+    // general/user socket route
     app.ws('/ws', (ws, req) => {
         this.clients.push({ socket: ws, uid: req.session.userID })
 
@@ -23,6 +24,7 @@ module.exports = function (app) {
 
     this.groups = {}
 
+    // group socket route
     app.ws('/ws/groups/:group', (ws, req) => {
         if (!this.groups[req.params.group]) this.groups[req.params.group] = []
         this.groups[req.params.group].push({ socket: ws, uid: req.session.userID })

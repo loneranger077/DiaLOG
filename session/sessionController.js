@@ -2,6 +2,7 @@ const db = require("../models")
 const bcrypt = require("bcrypt");
 
 module.exports = {
+    // compare the password the the password for a given username
     activate: (req, username, password) => {
         return new Promise(function (resolve, reject) {
             db.User.findOne({
@@ -18,6 +19,7 @@ module.exports = {
             })
         });
     },
+    // gets the user from the session
     user: req => {
         return new Promise(function (resolve, reject) {
             if (!req.session.userID) return reject(false)
@@ -31,6 +33,7 @@ module.exports = {
             })
         });
     },
+    // destroys the current session
     destroy: req => {
         return new Promise(function (resolve, reject) {
             req.session.destroy()
